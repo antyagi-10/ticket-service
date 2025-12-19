@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ticket-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ticketdb
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8082
+
+external:
+  user-service:
+    base-url:
+      host: http://localhost:8081
+      valid-token-path: /v1/users/validateToken
