@@ -45,8 +45,13 @@ public class TicketControllerImpl implements TicketController {
     }
 
     @Override
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
-        boolean deleted = ticketService.deleteUser(id);
+    public ResponseEntity<String> delete(@PathVariable Integer id,
+                                         @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        boolean deleted = ticketService.deleteUser(id, token);
         return ResponseEntity.ok("Ticket deleted successfully");
     }
 

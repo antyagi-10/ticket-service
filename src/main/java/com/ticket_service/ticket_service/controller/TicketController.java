@@ -15,5 +15,5 @@ public interface TicketController {
     ResponseEntity<TicketResponseDTO> createTicket(@Valid @RequestBody  TicketRequestDTO request,@RequestHeader("Authorization") String authorizationHeader);
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> delete(@PathVariable Integer id);
+    ResponseEntity<String> delete(@PathVariable Integer id, @RequestHeader("Authorization") String authorizationHeader);
 }
