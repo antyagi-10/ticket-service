@@ -3,6 +3,7 @@ package com.ticket_service.ticket_service.service;
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
 import com.ticket_service.ticket_service.entity.TicketEntity;
+import com.ticket_service.ticket_service.exception.TicketNotFoundException;
 import com.ticket_service.ticket_service.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public boolean deleteUser(Integer id) {
         if(ticketRepository.findById(id).isEmpty()){
-            throw new RuntimeException("Ticket not Found");
+            throw new TicketNotFoundException("Ticket not Found");
         }
         ticketRepository.deleteById(id);
         return true;

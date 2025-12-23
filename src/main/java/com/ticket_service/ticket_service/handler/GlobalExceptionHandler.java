@@ -1,13 +1,13 @@
 package com.ticket_service.ticket_service.handler;
 
 import com.ticket_service.ticket_service.dto.ErrorDTO;
+import com.ticket_service.ticket_service.exception.TicketNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -39,6 +39,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    //401
+    @ExceptionHandler(TicketNotFoundException.class)
+    public ResponseEntity<ErrorDTO> handleUserNotFound(
+            TicketNotFoundException ex,
+            HttpServletRequest request) {
+
+        ErrorDTO error = new ErrorDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "NOT_FOUND",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     //500
