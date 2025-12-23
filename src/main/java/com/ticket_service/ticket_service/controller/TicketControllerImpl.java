@@ -1,8 +1,10 @@
 package com.ticket_service.ticket_service.controller;
 
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
+import com.ticket_service.ticket_service.dto.TicketResponseDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
 import com.ticket_service.ticket_service.entity.TicketEntity;
+import com.ticket_service.ticket_service.mapper.TicketMapper;
 import com.ticket_service.ticket_service.service.TicketServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class TicketControllerImpl implements TicketController {
     }
 
     @Override
-    public ResponseEntity<TicketEntity> createTicket(
+    public ResponseEntity<TicketResponseDTO> createTicket(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody TicketRequestDTO request){
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -38,7 +40,7 @@ public class TicketControllerImpl implements TicketController {
         }
         String token = authorizationHeader.substring(7);
         TicketEntity ticket = ticketService.createTicket(request, token);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
+        return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(ticket));
     }
 
 }

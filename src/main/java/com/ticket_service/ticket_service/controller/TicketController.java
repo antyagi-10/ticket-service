@@ -1,6 +1,7 @@
 package com.ticket_service.ticket_service.controller;
 
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
+import com.ticket_service.ticket_service.dto.TicketResponseDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import org.springframework.http.ResponseEntity;
@@ -12,5 +13,5 @@ public interface TicketController {
     @PostMapping("/validateToken")
     ResponseEntity<UserResponseDTO> validateToken(@RequestHeader("Authorization") String authorizationHeader);
     @PostMapping("/createTickets")
-    ResponseEntity<TicketEntity> createTicket(@RequestHeader("Authorization") String authorizationHeader, @RequestBody TicketRequestDTO request);
+    ResponseEntity<TicketResponseDTO> createTicket(@RequestHeader("Authorization") String authorizationHeader, @RequestBody TicketRequestDTO request);
 }
