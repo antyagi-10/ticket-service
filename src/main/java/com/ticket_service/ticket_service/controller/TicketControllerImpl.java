@@ -6,6 +6,7 @@ import com.ticket_service.ticket_service.dto.UserResponseDTO;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.mapper.TicketMapper;
 import com.ticket_service.ticket_service.service.TicketServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,8 @@ public class TicketControllerImpl implements TicketController {
 
     @Override
     public ResponseEntity<TicketResponseDTO> createTicket(
-            @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody TicketRequestDTO request){
+            @Valid @RequestBody  TicketRequestDTO request,
+            @RequestHeader("Authorization") String authorizationHeader){
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
