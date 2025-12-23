@@ -47,4 +47,13 @@ public class TicketServiceImpl implements TicketService{
         return ticketRepository.save(ticket);
     }
 
+    @Override
+    public boolean deleteUser(Integer id) {
+        if(ticketRepository.findById(id).isEmpty()){
+            throw new RuntimeException("Ticket not Found");
+        }
+        ticketRepository.deleteById(id);
+        return true;
+    }
+
 }

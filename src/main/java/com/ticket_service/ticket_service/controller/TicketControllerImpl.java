@@ -44,4 +44,10 @@ public class TicketControllerImpl implements TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(ticket));
     }
 
+    @Override
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        boolean deleted = ticketService.deleteUser(id);
+        return ResponseEntity.ok("Ticket deleted successfully");
+    }
+
 }
