@@ -29,4 +29,16 @@ public class TicketControllerImpl implements TicketController {
         return ResponseEntity.ok(user);
     }
 
+    @Override
+    public ResponseEntity<TicketEntity> createTicket(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody TicketRequestDTO request){
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        TicketEntity ticket = ticketService.createTicket(request, token);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
+    }
+
 }
