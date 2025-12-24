@@ -7,4 +7,5 @@ import com.ticket_service.ticket_service.entity.TicketEntity;
 public interface TicketService {
     UserResponseDTO validateToken(String token);
     TicketEntity createTicket(TicketRequestDTO request, String token);
+    boolean deleteTicket(Integer id, String token);
 }

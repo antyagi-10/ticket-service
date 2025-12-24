@@ -44,4 +44,15 @@ public class TicketControllerImpl implements TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(ticket));
     }
 
+    @Override
+    public ResponseEntity<String> deleteTicket(@PathVariable Integer id,
+                                         @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        boolean deleted = ticketService.deleteTicket(id, token);
+        return ResponseEntity.ok("Ticket deleted successfully");
+    }
+
 }

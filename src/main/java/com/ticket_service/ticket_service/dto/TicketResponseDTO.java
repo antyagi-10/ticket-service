@@ -4,7 +4,6 @@ import com.ticket_service.ticket_service.entity.TicketEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Data
