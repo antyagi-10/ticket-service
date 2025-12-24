@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/ticket")
@@ -53,6 +54,25 @@ public class TicketControllerImpl implements TicketController {
         String token = authorizationHeader.substring(7);
         boolean deleted = ticketService.deleteTicket(id, token);
         return ResponseEntity.ok("Ticket deleted successfully");
+    }
+
+    @Override
+    public ResponseEntity<List<TicketEntity>> getAllTickets( @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        return ResponseEntity.ok(ticketService.getAllTickets(token));
+    }
+
+    @Override
+    public ResponseEntity<TicketEntity> getTicketById(@PathVariable Integer id, @RequestHeader("Authorization") String authorizationHeader) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        TicketEntity entry = ticketService.getTicketById(id, token);
+        return ResponseEntity.ok(entry);
     }
 
 }

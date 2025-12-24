@@ -7,10 +7,11 @@ import com.ticket_service.ticket_service.exception.TicketNotFoundException;
 import com.ticket_service.ticket_service.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
-
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -62,6 +63,35 @@ public class TicketServiceImpl implements TicketService{
         }
         ticketRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public List<TicketEntity> getAllTickets( String token) {
+        UserResponseDTO user = validateToken(token);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+        }
+        boolean isAdmin = user.getRole().equals("Admin");
+        if (!isAdmin) {
+            throw new AccessDeniedException("You are not allowed to access this ticket");
+        }
+        return ticketRepository.findAll();
+    }
+
+    @Override
+    public TicketEntity getTicketById(Integer id, String token) {
+        TicketEntity ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new TicketNotFoundException("User not found"));
+        UserResponseDTO user = validateToken(token);
+        boolean isCreator = ticket.getCreated_by().equals(user.getId());
+        boolean isAssignee = ticket.getAssigned_to() != null &&
+                ticket.getAssigned_to().equals(user.getId());
+        boolean isAdmin = user.getRole().equals("Admin");
+
+        if (!(isCreator || isAssignee || isAdmin)) {
+            throw new AccessDeniedException("You are not allowed to access this ticket");
+        }
+        return ticketRepository.findById(id).get();
     }
 
 }
