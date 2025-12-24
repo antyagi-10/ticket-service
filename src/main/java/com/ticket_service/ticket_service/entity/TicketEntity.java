@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -47,6 +48,9 @@ public class TicketEntity {
 
     @Column(name = "assigned_to")
     private Integer assigned_to;
+
+    @OneToMany(mappedBy = "ticket",  cascade = CascadeType.ALL)
+    private List<CommentEntity> comment;
 
     @CreationTimestamp
     @Column(name = "created_at")
