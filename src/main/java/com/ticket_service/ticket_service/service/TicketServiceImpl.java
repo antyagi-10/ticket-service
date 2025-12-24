@@ -52,7 +52,7 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public boolean deleteUser(Integer id, String token) {
+    public boolean deleteTicket(Integer id, String token) {
         UserResponseDTO user = validateToken(token);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
