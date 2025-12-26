@@ -99,7 +99,7 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public Comment addComment(Integer id, String token, CommentRequestDTO request) {
         TicketEntity ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         UserResponseDTO user = validateToken(token);
         boolean isCreator = ticket.getCreated_by().equals(user.getId());
         boolean isAssignee = ticket.getAssigned_to() != null &&
