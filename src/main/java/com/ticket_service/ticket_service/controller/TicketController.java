@@ -1,0 +1,11 @@
+package com.ticket_service.ticket_service.controller;
+
+import com.ticket_service.ticket_service.dto.UserResponseDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+public interface TicketController {
+    @PostMapping("/validateToken")
+    ResponseEntity<UserResponseDTO> validateToken(@RequestHeader("Authorization") String authorizationHeader);
+}
