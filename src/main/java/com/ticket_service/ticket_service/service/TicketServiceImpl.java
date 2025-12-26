@@ -81,7 +81,7 @@ public class TicketServiceImpl implements TicketService{
     @Override
     public TicketEntity getTicketById(Integer id, String token) {
         TicketEntity ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new TicketNotFoundException("User not found"));
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         UserResponseDTO user = validateToken(token);
         boolean isCreator = ticket.getCreated_by().equals(user.getId());
         boolean isAssignee = ticket.getAssigned_to() != null &&
