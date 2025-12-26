@@ -1,7 +1,7 @@
 package com.ticket_service.ticket_service.controller;
 
 import com.ticket_service.ticket_service.dto.*;
-import com.ticket_service.ticket_service.entity.CommentEntity;
+import com.ticket_service.ticket_service.entity.Comment;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.mapper.TicketMapper;
 import com.ticket_service.ticket_service.service.TicketServiceImpl;
@@ -84,7 +84,7 @@ public class TicketControllerImpl implements TicketController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String token = authorizationHeader.substring(7);
-        CommentEntity comment = ticketService.addComment(ticketId, token, request);
+        Comment comment = ticketService.addComment(ticketId, token, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(comment));
     }
 

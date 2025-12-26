@@ -50,7 +50,7 @@ public class TicketEntity {
     private Integer assigned_to;
 
     @OneToMany(mappedBy = "ticket",  cascade = CascadeType.ALL)
-    private List<CommentEntity> comment;
+    private List<Comment> comment;
 
     @CreationTimestamp
     @Column(name = "created_at")

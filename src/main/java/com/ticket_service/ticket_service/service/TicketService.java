@@ -3,7 +3,7 @@ package com.ticket_service.ticket_service.service;
 import com.ticket_service.ticket_service.dto.CommentRequestDTO;
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
-import com.ticket_service.ticket_service.entity.CommentEntity;
+import com.ticket_service.ticket_service.entity.Comment;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import java.util.List;
 
@@ -13,5 +13,5 @@ public interface TicketService {
     boolean deleteTicket(Integer id, String token);
     List<TicketEntity> getAllTickets( String token);
     TicketEntity getTicketById(Integer id, String token);
-    CommentEntity addComment(Integer id, String token, CommentRequestDTO request);
+    Comment addComment(Integer id, String token, CommentRequestDTO request);
 }

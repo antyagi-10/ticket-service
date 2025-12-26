@@ -3,7 +3,7 @@ package com.ticket_service.ticket_service.service;
 import com.ticket_service.ticket_service.dto.CommentRequestDTO;
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
-import com.ticket_service.ticket_service.entity.CommentEntity;
+import com.ticket_service.ticket_service.entity.Comment;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.exception.TicketNotFoundException;
 import com.ticket_service.ticket_service.repository.TicketRepository;
@@ -97,7 +97,7 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public CommentEntity addComment(Integer id, String token, CommentRequestDTO request) {
+    public Comment addComment(Integer id, String token, CommentRequestDTO request) {
         TicketEntity ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
         UserResponseDTO user = validateToken(token);
@@ -108,7 +108,7 @@ public class TicketServiceImpl implements TicketService{
         if (!(isCreator || isAssignee || isAdmin)) {
             throw new AccessDeniedException("You are not allowed to add comment on this ticket");
         }
-        CommentEntity comment = new CommentEntity();
+        Comment comment = new Comment();
         comment.setComment(request.getComment());
         comment.setCommented_by(user.getId());
         comment.setTicket(ticket);
