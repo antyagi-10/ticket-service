@@ -1,7 +1,9 @@
 package com.ticket_service.ticket_service.service;
 
+import com.ticket_service.ticket_service.dto.CommentRequestDTO;
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
+import com.ticket_service.ticket_service.entity.CommentEntity;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.exception.TicketNotFoundException;
 import com.ticket_service.ticket_service.repository.TicketRepository;
@@ -11,8 +13,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class TicketServiceImpl implements TicketService{
@@ -92,6 +94,29 @@ public class TicketServiceImpl implements TicketService{
             throw new AccessDeniedException("You are not allowed to access this ticket");
         }
         return ticketRepository.findById(id).get();
+    }
+
+    @Override
+    public CommentEntity addComment(Integer id, String token, CommentRequestDTO request) {
+        TicketEntity ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+        UserResponseDTO user = validateToken(token);
+        boolean isCreator = ticket.getCreated_by().equals(user.getId());
+        boolean isAssignee = ticket.getAssigned_to() != null &&
+                ticket.getAssigned_to().equals(user.getId());
+        boolean isAdmin = user.getRole().equals("Admin");
+        if (!(isCreator || isAssignee || isAdmin)) {
+            throw new AccessDeniedException("You are not allowed to add comment on this ticket");
+        }
+        CommentEntity comment = new CommentEntity();
+        comment.setComment(request.getComment());
+        comment.setCommented_by(user.getId());
+        comment.setTicket(ticket);
+        comment.setCreated_at(LocalDateTime.now());
+        comment.setUpdated_at(LocalDateTime.now());
+        ticket.getComment().add(comment);
+        ticketRepository.save(ticket);
+        return comment;
     }
 
 }

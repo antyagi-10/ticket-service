@@ -1,10 +1,10 @@
 package com.ticket_service.ticket_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +14,7 @@ public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ticket_id" , nullable = false)
+    @Column(name = "comment_id" , nullable = false)
     private Integer id;
 
     @Column(name = "comment", nullable = false )
@@ -25,6 +25,7 @@ public class CommentEntity {
 
     @ManyToOne
     @JoinColumn(name = "ticket_id", nullable = false)
+    @JsonIgnore
     private TicketEntity ticket;
 
     @CreationTimestamp
