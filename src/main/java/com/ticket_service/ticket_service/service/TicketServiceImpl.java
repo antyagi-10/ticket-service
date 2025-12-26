@@ -1,9 +1,6 @@
 package com.ticket_service.ticket_service.service;
 
-import com.ticket_service.ticket_service.dto.TicketRequestDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
-import com.ticket_service.ticket_service.entity.TicketEntity;
-import com.ticket_service.ticket_service.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
