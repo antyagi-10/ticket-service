@@ -119,4 +119,23 @@ public class TicketServiceImpl implements TicketService{
         return comment;
     }
 
+    @Override
+    public Comment updateComment(Integer ticketId, Integer commentId, String token, CommentRequestDTO request) {
+        TicketEntity ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        UserResponseDTO user = validateToken(token);
+        Comment comment = ticket.getComment()
+                .stream()
+                .filter(c -> c.getId().equals(commentId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        if (!comment.getCommented_by().equals(user.getId())) {
+            throw new RuntimeException("You are not allowed to edit this comment");
+        }
+
+        comment.setComment(request.getComment());
+        comment.setUpdated_at(LocalDateTime.now());
+        ticketRepository.save(ticket);
+        return comment;
+    }
 }

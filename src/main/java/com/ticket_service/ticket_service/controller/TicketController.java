@@ -38,4 +38,12 @@ public interface TicketController {
             @RequestBody CommentRequestDTO request
     );
 
+    @PatchMapping("{ticketId}/{commentId}/updateComment")
+    ResponseEntity<CommentResponseDTO> updateComment(
+            @PathVariable Integer ticketId,
+            @PathVariable Integer commentId,
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody CommentRequestDTO request
+    );
+
 }

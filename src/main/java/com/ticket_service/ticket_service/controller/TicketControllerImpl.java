@@ -88,5 +88,20 @@ public class TicketControllerImpl implements TicketController {
         return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(comment));
     }
 
+    @Override
+    public ResponseEntity<CommentResponseDTO> updateComment(
+            @PathVariable Integer ticketId,
+            @PathVariable Integer commentId,
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody CommentRequestDTO request
+    ){
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        Comment comment = ticketService.updateComment(ticketId, commentId, token, request);
+        return ResponseEntity.ok(TicketMapper.toDto(comment));
+    }
+
 }
 

@@ -14,4 +14,5 @@ public interface TicketService {
     List<TicketEntity> getAllTickets( String token);
     TicketEntity getTicketById(Integer id, String token);
     Comment addComment(Integer id, String token, CommentRequestDTO request);
+    Comment updateComment(Integer ticketId, Integer commentId, String token, CommentRequestDTO request);
 }
