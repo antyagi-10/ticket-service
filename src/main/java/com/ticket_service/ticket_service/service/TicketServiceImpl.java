@@ -110,10 +110,10 @@ public class TicketServiceImpl implements TicketService{
         }
         Comment comment = new Comment();
         comment.setComment(request.getComment());
-        comment.setCommented_by(user.getId());
+        comment.setCommentedBy(user.getId());
         comment.setTicket(ticket);
-        comment.setCreated_at(LocalDateTime.now());
-        comment.setUpdated_at(LocalDateTime.now());
+        comment.setCreatedAt(LocalDateTime.now());
+        comment.setUpdatedAt(LocalDateTime.now());
         ticket.getComment().add(comment);
         ticketRepository.save(ticket);
         return comment;
@@ -129,12 +129,12 @@ public class TicketServiceImpl implements TicketService{
                 .filter(c -> c.getId().equals(commentId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
-        if (!comment.getCommented_by().equals(user.getId())) {
+        if (!comment.getCommentedBy().equals(user.getId())) {
             throw new RuntimeException("You are not allowed to edit this comment");
         }
 
         comment.setComment(request.getComment());
-        comment.setUpdated_at(LocalDateTime.now());
+        comment.setUpdatedAt(LocalDateTime.now());
         ticketRepository.save(ticket);
         return comment;
     }

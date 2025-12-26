@@ -21,9 +21,9 @@ public class TicketMapper {
     public static CommentResponseDTO toDto(Comment comment) {
         return new CommentResponseDTO(
                 comment.getComment(),
-                comment.getCommented_by(),
-                comment.getCreated_at(),
-                comment.getUpdated_at()
+                comment.getCommentedBy(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()
         );
     }
 

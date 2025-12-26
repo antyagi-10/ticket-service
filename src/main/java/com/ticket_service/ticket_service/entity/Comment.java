@@ -14,26 +14,26 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id" , nullable = false)
+    @Column(name = "commentId" , nullable = false)
     private Integer id;
 
     @Column(name = "comment", nullable = false )
     private String comment;
 
-    @Column(name = "commented_by", nullable = false )
-    private Integer commented_by;
+    @Column(name = "commentedBy", nullable = false )
+    private Integer commentedBy;
 
     @ManyToOne
-    @JoinColumn(name = "ticket_id", nullable = false)
+    @JoinColumn(name = "ticketId", nullable = false)
     @JsonIgnore
     private TicketEntity ticket;
 
     @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime created_at;
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updated_at;
+    @Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
 
 }

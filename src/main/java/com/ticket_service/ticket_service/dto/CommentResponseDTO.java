@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CommentResponseDTO {
     private String comment;
-    private Integer commented_by;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private Integer commentedBy;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

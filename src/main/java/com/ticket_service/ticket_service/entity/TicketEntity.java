@@ -26,7 +26,7 @@ public class TicketEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ticket_id" , nullable = false)
+    @Column(name = "ticketId" , nullable = false)
     private Integer id;
 
     @Column(name = "title", nullable = false )
