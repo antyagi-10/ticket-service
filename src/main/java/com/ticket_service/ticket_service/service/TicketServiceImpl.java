@@ -6,6 +6,7 @@ import com.ticket_service.ticket_service.dto.UserResponseDTO;
 import com.ticket_service.ticket_service.entity.Comment;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.exception.TicketNotFoundException;
+import com.ticket_service.ticket_service.publisher.TicketPublisher;
 import com.ticket_service.ticket_service.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,14 @@ public class TicketServiceImpl implements TicketService{
 
     private final TicketRepository ticketRepository;
     private final WebClient webClient;
+
     @Value("${external.user-service.base-url.host}")
     private String baseUrl;
     @Value("${external.user-service.base-url.valid-token-path}")
     private String validTokenPath;
 
-    public TicketServiceImpl(TicketRepository ticketRepository, WebClient webClient) {
+    public TicketServiceImpl(TicketRepository ticketRepository,
+                             WebClient webClient) {
         this.ticketRepository = ticketRepository;
         this.webClient = webClient;
     }
@@ -51,7 +54,7 @@ public class TicketServiceImpl implements TicketService{
         ticket.setStatus(TicketEntity.Status.Open);
         ticket.setCreated_by(user.getId());
         ticket.setAssigned_to(null);
-        return ticketRepository.save(ticket);
+        return  ticketRepository.save(ticket);
     }
 
     @Override

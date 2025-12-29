@@ -12,6 +12,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    queue: event-queue
+    exchange: event-exchange
+    routingkey: event-routing-key
 
 server:
   port: 8082
