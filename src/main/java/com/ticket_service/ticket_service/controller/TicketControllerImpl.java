@@ -1,8 +1,7 @@
 package com.ticket_service.ticket_service.controller;
 
-import com.ticket_service.ticket_service.dto.TicketRequestDTO;
-import com.ticket_service.ticket_service.dto.TicketResponseDTO;
-import com.ticket_service.ticket_service.dto.UserResponseDTO;
+import com.ticket_service.ticket_service.dto.*;
+import com.ticket_service.ticket_service.entity.Comment;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.mapper.TicketMapper;
 import com.ticket_service.ticket_service.service.TicketServiceImpl;
@@ -75,4 +74,32 @@ public class TicketControllerImpl implements TicketController {
         return ResponseEntity.ok(entry);
     }
 
+    @Override
+    public ResponseEntity<CommentResponseDTO> addComment(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody CommentRequestDTO request
+    ) {
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        Comment comment = ticketService.addComment(token, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(comment));
+    }
+
+    @Override
+    public ResponseEntity<CommentResponseDTO> updateComment(
+            @PathVariable Integer commentId,
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody CommentRequestDTO request
+    ){
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authorizationHeader.substring(7);
+        Comment comment = ticketService.updateComment(commentId, token, request);
+        return ResponseEntity.ok(TicketMapper.toDto(comment));
+    }
+
 }
+

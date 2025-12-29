@@ -1,7 +1,9 @@
 package com.ticket_service.ticket_service.service;
 
+import com.ticket_service.ticket_service.dto.CommentRequestDTO;
 import com.ticket_service.ticket_service.dto.TicketRequestDTO;
 import com.ticket_service.ticket_service.dto.UserResponseDTO;
+import com.ticket_service.ticket_service.entity.Comment;
 import com.ticket_service.ticket_service.entity.TicketEntity;
 import com.ticket_service.ticket_service.exception.TicketNotFoundException;
 import com.ticket_service.ticket_service.repository.TicketRepository;
@@ -11,8 +13,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class TicketServiceImpl implements TicketService{
@@ -94,4 +96,47 @@ public class TicketServiceImpl implements TicketService{
         return ticketRepository.findById(id).get();
     }
 
+    @Override
+    public Comment addComment(String token, CommentRequestDTO request) {
+        TicketEntity ticket = ticketRepository.findById(request.getTicketId())
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        UserResponseDTO user = validateToken(token);
+        boolean isCreator = ticket.getCreated_by().equals(user.getId());
+        boolean isAssignee = ticket.getAssigned_to() != null &&
+                ticket.getAssigned_to().equals(user.getId());
+        boolean isAdmin = user.getRole().equals("Admin");
+        if (!(isCreator || isAssignee || isAdmin)) {
+            throw new AccessDeniedException("You are not allowed to add comment on this ticket");
+        }
+        Comment comment = new Comment();
+        comment.setComment(request.getComment());
+        comment.setCommentedBy(user.getId());
+        comment.setCommenterEmail(user.getEmail());
+        comment.setTicket(ticket);
+        comment.setCreatedAt(LocalDateTime.now());
+        comment.setUpdatedAt(LocalDateTime.now());
+        ticket.getComment().add(comment);
+        ticketRepository.save(ticket);
+        return comment;
+    }
+
+    @Override
+    public Comment updateComment(Integer commentId, String token, CommentRequestDTO request) {
+        TicketEntity ticket = ticketRepository.findById(request.getTicketId())
+                .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
+        UserResponseDTO user = validateToken(token);
+        Comment comment = ticket.getComment()
+                .stream()
+                .filter(c -> c.getId().equals(commentId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        if (!comment.getCommentedBy().equals(user.getId())) {
+            throw new AccessDeniedException("You are not allowed to edit this comment");
+        }
+
+        comment.setComment(request.getComment());
+        comment.setUpdatedAt(LocalDateTime.now());
+        ticketRepository.save(ticket);
+        return comment;
+    }
 }
