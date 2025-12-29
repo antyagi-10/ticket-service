@@ -22,6 +22,7 @@ public class TicketMapper {
         return new CommentResponseDTO(
                 comment.getComment(),
                 comment.getCommentedBy(),
+                comment.getCommenterEmail(),
                 comment.getCreatedAt(),
                 comment.getUpdatedAt()
         );

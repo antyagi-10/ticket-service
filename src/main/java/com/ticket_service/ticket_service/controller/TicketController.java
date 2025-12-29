@@ -31,16 +31,14 @@ public interface TicketController {
             @PathVariable Integer id,
             @RequestHeader("Authorization") String authorizationHeader);
 
-    @PostMapping("/{ticketId}/addComment")
+    @PostMapping("/addComment")
     ResponseEntity<CommentResponseDTO> addComment(
-            @PathVariable Integer ticketId,
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody CommentRequestDTO request
     );
 
-    @PatchMapping("{ticketId}/{commentId}/updateComment")
+    @PatchMapping("/{commentId}/updateComment")
     ResponseEntity<CommentResponseDTO> updateComment(
-            @PathVariable Integer ticketId,
             @PathVariable Integer commentId,
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody CommentRequestDTO request

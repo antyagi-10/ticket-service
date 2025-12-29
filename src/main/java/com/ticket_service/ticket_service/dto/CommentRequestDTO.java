@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class CommentRequestDTO {
+    private Integer ticketId;
     private String comment;
 }

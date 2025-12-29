@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class CommentResponseDTO {
     private String comment;
     private Integer commentedBy;
+    private String commenterEmail;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

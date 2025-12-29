@@ -97,8 +97,8 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public Comment addComment(Integer id, String token, CommentRequestDTO request) {
-        TicketEntity ticket = ticketRepository.findById(id)
+    public Comment addComment(String token, CommentRequestDTO request) {
+        TicketEntity ticket = ticketRepository.findById(request.getTicketId())
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         UserResponseDTO user = validateToken(token);
         boolean isCreator = ticket.getCreated_by().equals(user.getId());
@@ -111,6 +111,7 @@ public class TicketServiceImpl implements TicketService{
         Comment comment = new Comment();
         comment.setComment(request.getComment());
         comment.setCommentedBy(user.getId());
+        comment.setCommenterEmail(user.getEmail());
         comment.setTicket(ticket);
         comment.setCreatedAt(LocalDateTime.now());
         comment.setUpdatedAt(LocalDateTime.now());
@@ -120,8 +121,8 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public Comment updateComment(Integer ticketId, Integer commentId, String token, CommentRequestDTO request) {
-        TicketEntity ticket = ticketRepository.findById(ticketId)
+    public Comment updateComment(Integer commentId, String token, CommentRequestDTO request) {
+        TicketEntity ticket = ticketRepository.findById(request.getTicketId())
                 .orElseThrow(() -> new TicketNotFoundException("Ticket not found"));
         UserResponseDTO user = validateToken(token);
         Comment comment = ticket.getComment()
@@ -130,7 +131,7 @@ public class TicketServiceImpl implements TicketService{
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
         if (!comment.getCommentedBy().equals(user.getId())) {
-            throw new RuntimeException("You are not allowed to edit this comment");
+            throw new AccessDeniedException("You are not allowed to edit this comment");
         }
 
         comment.setComment(request.getComment());

@@ -76,7 +76,6 @@ public class TicketControllerImpl implements TicketController {
 
     @Override
     public ResponseEntity<CommentResponseDTO> addComment(
-            @PathVariable Integer ticketId,
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody CommentRequestDTO request
     ) {
@@ -84,13 +83,12 @@ public class TicketControllerImpl implements TicketController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String token = authorizationHeader.substring(7);
-        Comment comment = ticketService.addComment(ticketId, token, request);
+        Comment comment = ticketService.addComment(token, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(TicketMapper.toDto(comment));
     }
 
     @Override
     public ResponseEntity<CommentResponseDTO> updateComment(
-            @PathVariable Integer ticketId,
             @PathVariable Integer commentId,
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody CommentRequestDTO request
@@ -99,7 +97,7 @@ public class TicketControllerImpl implements TicketController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String token = authorizationHeader.substring(7);
-        Comment comment = ticketService.updateComment(ticketId, commentId, token, request);
+        Comment comment = ticketService.updateComment(commentId, token, request);
         return ResponseEntity.ok(TicketMapper.toDto(comment));
     }
 

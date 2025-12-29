@@ -23,6 +23,9 @@ public class Comment {
     @Column(name = "commentedBy", nullable = false )
     private Integer commentedBy;
 
+    @Column(name = "commenterEmail", nullable = false )
+    private String commenterEmail;
+
     @ManyToOne
     @JoinColumn(name = "ticketId", nullable = false)
     @JsonIgnore
